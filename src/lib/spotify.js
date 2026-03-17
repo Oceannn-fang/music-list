@@ -183,6 +183,70 @@ export const getNewReleases = async (accessToken, limit = 20) => {
   }
 }
 
+/**
+ * 获取最近播放历史
+ * @param {string} accessToken - Spotify access token
+ * @param {number} limit - 返回结果数量 (最大 50)
+ * @param {string} after - 从此时间戳之后开始 (毫秒)
+ * @returns {Promise<{tracks: Array, error: string | null}>}
+ */
+export const getRecentlyPlayed = async (accessToken, limit = 50, after = null) => {
+  if (!accessToken) {
+    return { tracks: [], error: '未登录 Spotify' }
+  }
+
+  try {
+    let url = `${SPOTIFY_API_BASE}/me/player/recently-played?limit=${Math.min(limit, 50)}`
+    if (after) {
+      url += `&after=${after}`
+    }
+
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+
+    if (!response.ok) {
+      if (response.status === 403) {
+        return { tracks: [], error: '没有权限访问播放历史，请重新登录授权' }
+      }
+      throw new Error(`Spotify API error: ${response.status}`)
+    }
+
+    const data = await response.json()
+    
+    // 从播放记录中提取专辑信息（去重）
+    const albumMap = new Map()
+    data.items?.forEach(item => {
+      const track = item.track
+      if (track?.album) {
+        const album = track.album
+        // 只保存专辑类型的记录（不是单曲）
+        if (album.album_type === 'album' && !albumMap.has(album.id)) {
+          albumMap.set(album.id, {
+            ...formatAlbumData(album),
+            playedAt: item.played_at,
+          })
+        }
+      }
+    })
+
+    const albums = Array.from(albumMap.values())
+    
+    return { 
+      albums, 
+      tracks: data.items || [],
+      next: data.next,
+      cursors: data.cursors,
+      error: null 
+    }
+  } catch (error) {
+    console.error('Get recently played error:', error)
+    return { albums: [], tracks: [], error: error.message }
+  }
+}
+
 export default {
   searchAlbums,
   getAlbumDetails,

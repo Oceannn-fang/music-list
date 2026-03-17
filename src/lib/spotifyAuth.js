@@ -13,6 +13,7 @@ const SCOPES = [
   'user-read-private',
   'playlist-read-private',
   'user-library-read',
+  'user-read-recently-played', // 获取最近播放
 ].join(' ')
 
 /**

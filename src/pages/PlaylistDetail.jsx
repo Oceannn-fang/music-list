@@ -7,6 +7,7 @@ import { getCurrentUserId } from '../lib/spotifyAuth'
 import AlbumCard from '../components/AlbumCard'
 import SearchModal from '../components/SearchModal'
 import AlbumDetailModal from '../components/AlbumDetailModal'
+import RecentlyPlayedModal from '../components/RecentlyPlayedModal'
 
 const PlaylistDetail = ({ user, getSpotifyToken }) => {
   const { id } = useParams()
@@ -27,6 +28,7 @@ const PlaylistDetail = ({ user, getSpotifyToken }) => {
   } = useAlbums(id, userId)
 
   const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [isSyncOpen, setIsSyncOpen] = useState(false)
   const [selectedAlbum, setSelectedAlbum] = useState(null)
   const [accessToken, setAccessToken] = useState(null)
 
@@ -112,6 +114,16 @@ const PlaylistDetail = ({ user, getSpotifyToken }) => {
           </svg>
           搜索添加专辑
         </button>
+        
+        <button
+          onClick={() => setIsSyncOpen(true)}
+          className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white font-medium rounded-full transition-all hover:scale-105 flex items-center gap-2"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+          同步最近播放
+        </button>
       </div>
 
       {/* 专辑墙 */}
@@ -159,6 +171,15 @@ const PlaylistDetail = ({ user, getSpotifyToken }) => {
         isOpen={!!selectedAlbum}
         onClose={() => setSelectedAlbum(null)}
         onUpdate={handleUpdateAlbum}
+      />
+
+      {/* 同步最近播放弹窗 */}
+      <RecentlyPlayedModal
+        isOpen={isSyncOpen}
+        onClose={() => setIsSyncOpen(false)}
+        accessToken={accessToken}
+        onAddAlbums={handleAddAlbum}
+        existingAlbums={albums}
       />
     </div>
   )
