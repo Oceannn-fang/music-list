@@ -13,6 +13,11 @@ dist-ssr/
 .env.*
 !.env.example
 
+# Secrets backup
+SECRETS_BACKUP.md
+*secrets*
+*token*
+
 # IDE
 .vscode/*
 !.vscode/extensions.json
