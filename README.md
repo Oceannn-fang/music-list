@@ -1,104 +1,87 @@
-# Music Lists - 音乐清单应用
+# Music Lists
 
-类似 stat.fm 的音乐清单网站，支持 Spotify OAuth 登录、专辑搜索、清单管理和唱片墙展示。
+一个基于 Spotify API 的音乐专辑清单管理应用。创建你的音乐收藏，记录听过的专辑，生成属于你的唱片墙。
+
+## 功能
+
+- 🔐 **Spotify 登录** - OAuth 2.0 + PKCE 安全认证
+- 📁 **多清单管理** - 创建多个专辑清单（如：2026年专辑、黑胶收藏等）
+- 🔍 **Spotify 搜索** - 直接从 Spotify 搜索并添加专辑
+- ⭐ **评分系统** - 1-5 星评分（支持半星）
+- 📝 **短评记录** - 写下你的听后感
+- 📋 **状态标记** - 想听 / 在听 / 听过
+- 🏷️ **标签系统** - 自定义标签分类
+- 📊 **数据回顾** - 统计面板，查看收藏趋势、最爱艺人、评分分布
+- 📱 **PWA 支持** - 可添加到手机主屏幕，像原生 App 一样使用
+- 🔄 **实时同步** - 多设备实时同步数据
 
 ## 技术栈
 
 - **前端**: React 18 + Vite + Tailwind CSS
-- **后端**: Supabase (PostgreSQL + 实时订阅)
-- **API**: Spotify Web API (PKCE OAuth)
+- **后端**: Supabase (PostgreSQL + Realtime)
+- **认证**: Spotify OAuth 2.0 with PKCE
+- **API**: Spotify Web API
+- **部署**: Vercel
 
-## 功能特性
-
-- 🔐 Spotify OAuth 登录（PKCE 流程，无需 Client Secret）
-- 📋 创建/删除/管理音乐清单
-- 🔍 通过 Spotify API 搜索专辑
-- 🖼️ 唱片墙网格展示
-- ⚡ 多设备实时同步
-
-## 快速开始
-
-### 1. 安装依赖
+## 本地开发
 
 ```bash
+# 安装依赖
 npm install
-```
 
-### 2. 配置 Spotify App
-
-1. 访问 [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
-2. 创建应用，获取 **Client ID**
-3. 在 **Redirect URIs** 中添加：
-   ```
-   http://127.0.0.1:5173/callback
-   ```
-   ⚠️ **注意**：必须用 `127.0.0.1`，`localhost` 会被 Spotify 拒绝
-
-### 3. 配置 Supabase
-
-1. 在 [Supabase](https://supabase.com) 创建项目
-2. 获取 Project URL 和 Anon Key
-3. 去 **SQL Editor** → **New query**，执行 `supabase/schema.sql` 的内容创建表
-
-### 4. 配置环境变量
-
-复制 `.env.example` 为 `.env`，填入你的配置：
-
-```env
-VITE_SUPABASE_URL=https://你的项目.supabase.co
-VITE_SUPABASE_ANON_KEY=你的_anon_key
-VITE_SPOTIFY_CLIENT_ID=你的_spotify_client_id
-VITE_SPOTIFY_REDIRECT_URI=http://127.0.0.1:5173/callback
-```
-
-### 5. 启动开发服务器
-
-```bash
+# 启动开发服务器
 npm run dev
 ```
 
-然后用浏览器打开：**http://127.0.0.1:5173** ⚠️ 不要用 localhost
+## 环境变量
 
-## 项目结构
+创建 `.env` 文件：
 
-```
-src/
-├── components/      # UI 组件
-│   ├── Header.jsx
-│   ├── PlaylistCard.jsx
-│   ├── AlbumCard.jsx
-│   └── SearchModal.jsx
-├── pages/          # 页面组件
-│   ├── Home.jsx
-│   ├── Callback.jsx
-│   └── PlaylistDetail.jsx
-├── hooks/          # 自定义 React Hooks
-│   ├── useAuth.js
-│   ├── usePlaylists.js
-│   ├── useAlbums.js
-│   └── useRealtime.js
-├── lib/            # 工具函数和 API 封装
-│   ├── spotify.js      # Spotify API 封装
-│   ├── spotifyAuth.js  # Spotify OAuth (PKCE)
-│   └── supabase.js     # Supabase 客户端
-└── App.jsx
+```env
+# Supabase
+VITE_SUPABASE_URL=你的Supabase项目URL
+VITE_SUPABASE_ANON_KEY=你的Supabase匿名密钥
+
+# Spotify
+VITE_SPOTIFY_CLIENT_ID=你的Spotify Client ID
+VITE_SPOTIFY_REDIRECT_URI=http://localhost:5173/callback
 ```
 
-## 部署
+## 部署到 Vercel
 
-### Vercel 部署
+### 1. 推送到 GitHub
 
-1. 推送代码到 GitHub
-2. 在 [Vercel](https://vercel.com) 导入项目
-3. 添加环境变量
-4. 在 Spotify App 中添加生产环境回调 URL：
-   ```
-   https://你的域名/callback
-   ```
+```bash
+# 创建 GitHub 仓库后
+git remote add origin https://github.com/你的用户名/music-lists.git
+git branch -M main
+git push -u origin main
+```
 
-## 注意事项
+### 2. Vercel 部署
 
-- Spotify OAuth 使用 PKCE 流程，无需 Client Secret，更安全
-- 所有数据存储在 Supabase，按 Spotify user_id 隔离
-- 实时同步通过 Supabase Realtime 实现
-- 令牌自动刷新，登录状态持久化
+1. 登录 [Vercel](https://vercel.com)
+2. 点击 "New Project"
+3. 导入你的 GitHub 仓库
+4. 配置环境变量（上面列出的那些）
+5. 点击 Deploy
+
+### 3. 配置 Spotify 回调地址
+
+部署后，更新 Spotify Developer Dashboard 中的 Redirect URI：
+- 添加: `https://你的vercel域名/callback`
+
+### 4. 更新环境变量
+
+将 `VITE_SPOTIFY_REDIRECT_URI` 改为生产环境地址：
+```env
+VITE_SPOTIFY_REDIRECT_URI=https://你的vercel域名/callback
+```
+
+## 数据库结构
+
+见 `supabase/schema.sql`
+
+## License
+
+MIT
