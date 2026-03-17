@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #2a2a2a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 40px;
+  font-family: 'Noto Serif SC', serif;
+}
+
+.container {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+.card {
+  width: 1050px;
+  height: 1480px;
+  background: #faf8f5;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+
+/* Front Side */
+.front {
+  padding: 80px 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.top-label {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 14px;
+  letter-spacing: 4px;
+  color: #8b7355;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.main-content {
+  margin-top: 60px;
+}
+
+.main-title {
+  font-size: 52px;
+  font-weight: 700;
+  color: #2c2416;
+  line-height: 1.3;
+  letter-spacing: 2px;
+  margin-bottom: 30px;
+}
+
+.subtitle {
+  font-size: 22px;
+  color: #5a4d3a;
+  line-height: 1.8;
+  font-weight: 400;
+  max-width: 90%;
+}
+
+.bottom-section {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 20px;
+}
+
+.qr-placeholder {
+  width: 140px;
+  height: 140px;
+  border: 2px solid #d4c8b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: #fff;
+}
+
+.qr-placeholder::before {
+  content: '';
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  background-image: 
+    repeating-linear-gradient(0deg, #2c2416 0px, #2c2416 4px, transparent 4px, transparent 8px),
+    repeating-linear-gradient(90deg, #2c2416 0px, #2c2416 4px, transparent 4px, transparent 8px);
+  background-size: 8px 8px;
+  opacity: 0.15;
+}
+
+.qr-label {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 12px;
+  color: #8b7355;
+  margin-top: 16px;
+  letter-spacing: 2px;
+}
+
+/* Back Side */
+.back {
+  display: flex;
+}
+
+.back-left {
+  width: 60%;
+  padding: 70px 50px;
+  border-right: 1px solid #e8e0d5;
+}
+
+.back-right {
+  width: 40%;
+  padding: 70px 40px;
+  background: linear-gradient(to bottom, #f5f2ed, #faf8f5);
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 45px;
+  padding-bottom: 35px;
+  border-bottom: 1px solid #e8e0d5;
+}
+
+.feature-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.icon {
+  width: 44px;
+  height: 44px;
+  margin-right: 20px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.feature-text h3 {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: #2c2416;
+  margin-bottom: 6px;
+  letter-spacing: 1px;
+}
+
+.feature-text p {
+  font-size: 14px;
+  color: #8b7355;
+  line-height: 1.6;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-weight: 300;
+}
+
+.guide-title {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #2c2416;
+  margin-bottom: 35px;
+  letter-spacing: 2px;
+}
+
+.guide-step {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 28px;
+}
+
+.step-num {
+  width: 28px;
+  height: 28px;
+  border: 1.5px solid #2c2416;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #2c2416;
+  margin-right: 14px;
+  flex-shrink: 0;
+}
+
+.step-text {
+  font-size: 14px;
+  color: #5a4d3a;
+  line-height: 1.7;
+  padding-top: 3px;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-weight: 300;
+}
+
+/* Decorative elements */
+.paper-texture {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+.corner-accent {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  width: 40px;
+  height: 40px;
+  border-right: 2px solid #d4c8b8;
+  border-bottom: 2px solid #d4c8b8;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <!-- Front Side -->
+  <div class="card front">
+    <div class="paper-texture"></div>
+    <div class="top-label">Reader Exclusive</div>
+    <div class="main-content">
+      <h1 class="main-title">AI 随身导师</h1>
+      <p class="subtitle">跨越"理解"与"掌握"的鸿沟，将书本知识转化为实战能力。</p>
+    </div>
+    <div class="bottom-section">
+      <div class="qr-placeholder"></div>
+      <div class="qr-label">扫码体验</div>
+    </div>
+    <div class="corner-accent"></div>
+  </div>
+
+  <!-- Back Side -->
+  <div class="card back">
+    <div class="paper-texture"></div>
+    <div class="back-left">
+      <div class="feature-item">
+        <div class="icon">🧠</div>
+        <div class="feature-text">
+          <h3>大师模式</h3>
+          <p>拆解真实难题，给出策略建议</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="icon">📋</div>
+        <div class="feature-text">
+          <h3>案例教学</h3>
+          <p>真实情境练习，做完即得反馈</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="icon">💡</div>
+        <div class="feature-text">
+          <h3>智能问答</h3>
+          <p>7×24小时AI导师随时答</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="icon">🎭</div>
+        <div class="feature-text">
+          <h3>场景陪练</h3>
+          <p>多轮角色演练，安全提升表达</p>
+        </div>
+      </div>
+    </div>
+    <div class="back-right">
+      <div class="guide-title">使用指南</div>
+      <div class="guide-step">
+        <div class="step-num">1</div>
+        <div class="step-text">扫描正面二维码进入</div>
+      </div>
+      <div class="guide-step">
+        <div class="step-num">2</div>
+        <div class="step-text">输入防伪码激活特权</div>
+      </div>
+      <div class="guide-step">
+        <div class="step-num">3</div>
+        <div class="step-text">开启你的第一次陪练</div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

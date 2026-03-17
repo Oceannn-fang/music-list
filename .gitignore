@@ -1,0 +1,62 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build
+dist/
+dist-ssr/
+*.local
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temp
+temp/
+*.tmp
+.cache/
+
+# Large files
+*.xlsx
+*.csv
+*.txt
+
+# OpenClaw specific
+.claude-config.yaml
+.clawhub/
+.openclaw/
+.skills/
+memory/
+
+# Scripts (keep only needed ones)
+scripts/*.html
+
+# Test files
+*.test.js
+*.spec.js
+
+# Coverage
+coverage/
