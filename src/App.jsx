@@ -9,7 +9,7 @@ import Header from './components/Header'
 import './index.css'
 
 function App() {
-  const { user, loading, signInWithSpotify, signOut, getSpotifyToken, isLoggedIn } = useAuth()
+  const { user, loading, signInWithSpotify, enterGuestMode, signOut, getSpotifyToken, isLoggedIn, isGuestMode } = useAuth()
 
   if (loading) {
     return (
@@ -38,8 +38,10 @@ function App() {
             element={
               <Home 
                 user={user} 
-                isLoggedIn={isLoggedIn} 
+                isLoggedIn={isLoggedIn}
+                isGuestMode={isGuestMode}
                 onSignIn={signInWithSpotify}
+                enterGuestMode={enterGuestMode}
                 getSpotifyToken={getSpotifyToken}
               />
             } 

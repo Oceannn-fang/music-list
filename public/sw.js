@@ -32,10 +32,12 @@ self.addEventListener('activate', (event) => {
 
 // 拦截请求，优先从缓存读取
 self.addEventListener('fetch', (event) => {
-  // 跳过非 GET 请求和 API 请求
+  // 跳过非 GET 请求、API 请求、chrome-extension 请求
+  const url = new URL(event.request.url)
   if (event.request.method !== 'GET' || 
       event.request.url.includes('api.spotify.com') ||
-      event.request.url.includes('supabase.co')) {
+      event.request.url.includes('supabase.co') ||
+      url.protocol === 'chrome-extension:') {
     return
   }
 

@@ -8,14 +8,22 @@ import {
   getCurrentUser,
 } from '../lib/spotifyAuth'
 
+// 访客模式用户
+const GUEST_USER = {
+  id: 'guest',
+  email: 'guest@local',
+  displayName: '访客',
+  isGuest: true
+}
+
 /**
- * 认证 Hook（纯 Spotify OAuth 版）
- * 不依赖 Supabase Auth Providers
+ * 认证 Hook（支持访客模式）
  */
 export const useAuth = () => {
   const [user, setUser] = useState(null)
   const [accessToken, setAccessToken] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [isGuestMode, setIsGuestMode] = useState(false)
 
   useEffect(() => {
     // 检查是否在 callback 页面
@@ -29,6 +37,17 @@ export const useAuth = () => {
 
   const checkAuthStatus = async () => {
     try {
+      // 先检查是否是访客模式
+      const guestMode = localStorage.getItem('guest_mode') === 'true'
+      setIsGuestMode(guestMode)
+      
+      if (guestMode) {
+        setUser(GUEST_USER)
+        setAccessToken('guest')
+        setLoading(false)
+        return
+      }
+      
       const token = await getAccessToken()
       const loggedIn = isLoggedIn()
       
@@ -55,14 +74,17 @@ export const useAuth = () => {
       setAccessToken(result.accessToken)
       setUser(result.user)
       
-      // 清除 URL 中的参数，跳转回首页
-      window.history.replaceState({}, document.title, '/')
+      // 清除访客模式
+      localStorage.removeItem('guest_mode')
+      setIsGuestMode(false)
+      
+      // 强制刷新页面
+      window.location.href = '/'
     } catch (error) {
       console.error('Callback error:', error)
       clearSpotifyAuth()
       setUser(null)
       setAccessToken(null)
-    } finally {
       setLoading(false)
     }
   }
@@ -80,10 +102,22 @@ export const useAuth = () => {
   }, [])
 
   /**
+   * 进入访客模式
+   */
+  const enterGuestMode = useCallback(() => {
+    localStorage.setItem('guest_mode', 'true')
+    setIsGuestMode(true)
+    setUser(GUEST_USER)
+    setAccessToken('guest')
+  }, [])
+
+  /**
    * 登出
    */
   const signOutUser = useCallback(async () => {
     clearSpotifyAuth()
+    localStorage.removeItem('guest_mode')
+    setIsGuestMode(false)
     setUser(null)
     setAccessToken(null)
   }, [])
@@ -100,9 +134,11 @@ export const useAuth = () => {
     session: accessToken ? { access_token: accessToken } : null,
     loading,
     signInWithSpotify,
+    enterGuestMode,
     signOut: signOutUser,
     getSpotifyToken,
     isLoggedIn: !!user,
+    isGuestMode,
   }
 }
 

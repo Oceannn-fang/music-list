@@ -10,8 +10,8 @@ const Callback = () => {
     const processCallback = async () => {
       try {
         await handleSpotifyCallback()
-        // 成功后跳转首页
-        navigate('/', { replace: true })
+        // 强制刷新页面确保状态重新加载
+        window.location.href = '/'
       } catch (err) {
         console.error('Callback error:', err)
         setError(err.message)
